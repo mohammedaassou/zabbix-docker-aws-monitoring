@@ -1,0 +1,638 @@
+\documentclass[12pt,a4paper]{report}
+
+% Encoding and language
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+% Page layout
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% Graphics and floats
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{caption}
+
+% Tables
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+
+% Links
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
+
+% Code listings
+\usepackage{xcolor}
+\usepackage{listings}
+% Make listings robust with UTF-8 accented characters (pdflatex)
+\lstset{
+  inputencoding=utf8,
+  extendedchars=true,
+  literate=
+    {á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ä}{{\"a}}1
+    {Á}{{\'A}}1 {À}{{\`A}}1 {Â}{{\^A}}1 {Ä}{{\"A}}1
+    {ç}{{\c c}}1 {Ç}{{\c C}}1
+    {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {ë}{{\"e}}1
+    {É}{{\'E}}1 {È}{{\`E}}1 {Ê}{{\^E}}1 {Ë}{{\"E}}1
+    {í}{{\'i}}1 {ì}{{\`i}}1 {î}{{\^i}}1 {ï}{{\"i}}1
+    {Í}{{\'I}}1 {Ì}{{\`I}}1 {Î}{{\^I}}1 {Ï}{{\"I}}1
+    {ó}{{\'o}}1 {ò}{{\`o}}1 {ô}{{\^o}}1 {ö}{{\"o}}1
+    {Ó}{{\'O}}1 {Ò}{{\`O}}1 {Ô}{{\^O}}1 {Ö}{{\"O}}1
+    {ú}{{\'u}}1 {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1
+    {Ú}{{\'U}}1 {Ù}{{\`U}}1 {Û}{{\^U}}1 {Ü}{{\"U}}1
+}
+\lstdefinestyle{bash}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{gray!7},
+  frame=single,
+  breaklines=true,
+  columns=fullflexible
+}
+\lstdefinestyle{yaml}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{gray!7},
+  frame=single,
+  breaklines=true,
+  columns=fullflexible
+}
+\lstdefinestyle{ini}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{gray!7},
+  frame=single,
+  breaklines=true,
+  columns=fullflexible
+}
+
+% Convenience for figures
+\newcommand{\imgpath}{../images}
+
+\begin{document}
+
+% Avoid duplicate PDF destinations by separating front matter numbering
+\pagenumbering{gobble}
+
+% =====================================================
+% 1. Page de garde
+% =====================================================
+\begin{titlepage}
+  \begin{center}
+
+    \vspace*{0.5cm}
+
+    % Logo (placeholder /images/logo.png)
+    \includegraphics[width=0.35\textwidth]{\imgpath/logo.png}\\[1.0cm]
+
+    {\LARGE\bfseries Mise en œuvre d’une infrastructure cloud de supervision centralisée sous AWS}\\[0.3cm]
+    {\large\bfseries Déploiement de Zabbix conteneurisé (Docker) pour le monitoring d’un parc hybride (Linux \& Windows)}\\[1.0cm]
+
+    \begin{tabular}{rl}
+      \textbf{Nom étudiant :} & Mohamed AASSOU \\
+      \textbf{Encadrant :} & Prof. Azeddine KHIAT \\
+      \textbf{Filière :} & 2ANCI - Génie Informatique \\
+      \textbf{Année universitaire :} & 2025/2026 \\
+    \end{tabular}
+
+    \vspace{0.3cm}
+    {\small\textbf{Dépôt GitHub :} \url{https://github.com/mohammedaassou/zabbix-docker-aws-monitoring.git}}
+
+    \vfill
+
+    % Image du projet (/images/project-cover.png)
+    \includegraphics[width=0.90\textwidth]{\imgpath/project-cover.png}\\[0.5cm]
+    {\small\textit{Figure de couverture : aperçu de l’architecture globale du projet.}}
+
+  \end{center}
+\end{titlepage}
+
+\clearpage
+\pagenumbering{roman}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\clearpage
+
+\pagenumbering{arabic}
+
+% =====================================================
+% 2. Introduction
+% =====================================================
+\chapter{Introduction}
+
+\section{Contexte}
+Dans les infrastructures informatiques modernes, les systèmes d’exploitation Linux et Windows cohabitent fréquemment. Cette hétérogénéité complique la supervision : les méthodes d’accès, les services, et les outils de collecte diffèrent. Une solution de monitoring centralisée permet de détecter rapidement les incidents, de suivre l’évolution des ressources (CPU, RAM, disque, réseau) et de garantir un niveau de disponibilité satisfaisant.
+
+Le cloud AWS offre un environnement standardisé pour déployer rapidement un serveur de supervision accessible, tout en appliquant des règles de sécurité cohérentes via les 
+\textit{Security Groups}. Dans ce projet, la plateforme Zabbix est déployée sous forme de conteneurs Docker afin de faciliter la reproductibilité et la maintenance.
+
+\section{Objectifs techniques}
+Les objectifs du projet sont les suivants :
+\begin{itemize}
+  \item Concevoir une architecture réseau AWS simple et conforme : un VPC, un subnet public, une Internet Gateway et une route table.
+  \item Déployer un serveur Zabbix conteneurisé (Docker) dans AWS (Zabbix Server + interface Web + base de données).
+  \item Superviser un parc hybride : un client Linux (Ubuntu) et un client Windows Server, via l’installation et la configuration d’agents Zabbix.
+  \item Vérifier le bon fonctionnement par l’observation du statut des hôtes (ZBX en vert) et l’affichage de graphiques CPU/RAM.
+\end{itemize}
+
+\section{Technologies utilisées}
+\begin{itemize}
+  \item \textbf{AWS (Learner Lab)} : VPC, Subnet, Internet Gateway, Route Table, Security Groups, EC2.
+  \item \textbf{Docker \& Docker Compose} : déploiement reproductible des services Zabbix.
+  \item \textbf{Zabbix} : collecte de métriques et visualisation (tableaux de bord).
+  \item \textbf{Ubuntu 22.04} : OS du serveur Zabbix et du client Linux.
+  \item \textbf{Windows Server} : OS du client Windows.
+\end{itemize}
+
+% =====================================================
+% 3. Architecture réseau
+% =====================================================
+\chapter{Architecture réseau}
+
+\section{Description du VPC, subnet, IGW et route table}
+L’architecture réseau est construite autour d’un VPC unique, avec un subnet public permettant un accès direct à Internet (sans VPN), conformément aux contraintes du lab.
+
+L’objectif de cette partie est de démontrer :
+\begin{itemize}
+  \item la \textbf{segmentation réseau} (VPC + subnet),
+  \item la \textbf{connectivité Internet} (IGW + route par défaut),
+  \item et la \textbf{sécurisation} (Security Groups) en ouvrant uniquement les ports nécessaires.
+\end{itemize}
+
+\subsection{Adressage IP}
+\begin{itemize}
+  \item \textbf{VPC} : CIDR \texttt{10.0.0.0/16}
+  \item \textbf{Subnet public} : CIDR \texttt{10.0.1.0/24}
+\end{itemize}
+
+\subsection{Connectivité Internet}
+\begin{itemize}
+  \item Une \textbf{Internet Gateway (IGW)} est attachée au VPC.
+  \item Une \textbf{Route Table} associée au subnet public contient la route par défaut \texttt{0.0.0.0/0} pointant vers l’IGW.
+\end{itemize}
+
+\subsection{Captures de configuration réseau}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-18-assets-vpc-creation.png}
+  \caption{Création du VPC (CIDR 10.0.0.0/16).}
+  \label{fig:vpc-create}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-17-assets-subnet-create.png}
+  \caption{Création du subnet public (10.0.1.0/24).}
+  \label{fig:subnet-create}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-22-assets-subnet-view.png}
+  \caption{Vérification du subnet (association et paramètres du subnet public).}
+  \label{fig:subnet-view}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-14-assets-routetable.png}
+  \caption{Route Table : route par défaut \texttt{0.0.0.0/0} vers l’Internet Gateway.}
+  \label{fig:routetable}
+\end{figure}
+
+\section{Security Groups : tableau des ports}
+Les règles de sécurité ouvrent uniquement les ports requis par le projet.
+
+\subsection{Principe de filtrage}
+Les règles sont définies selon le principe du moindre privilège :
+\begin{itemize}
+  \item \textbf{Administration} (SSH/RDP/Web) limitée à \textit{My IP}.
+  \item \textbf{Monitoring} : l’agent (10050) n’accepte que les requêtes venant du serveur Zabbix.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Ports autorisés par les Security Groups (synthèse)}
+\label{tab:ports}
+\begin{tabular}{@{}p{4.3cm}p{2.0cm}p{3.8cm}p{5.2cm}@{}}
+\toprule
+\textbf{Service / Usage} & \textbf{Port} & \textbf{Cible} & \textbf{Rôle} \\
+\midrule
+Interface Web Zabbix (HTTP/HTTPS) & 80 / 443 & Zabbix Server & Accès à l’UI depuis l’extérieur (My IP) \\
+Zabbix Server & 10051 & Zabbix Server & Réception / échanges côté serveur \\
+Zabbix Agent & 10050 & Clients Linux/Windows & Collecte des métriques par le serveur Zabbix \\
+Administration SSH & 22 & Instances Ubuntu & Administration distante (My IP) \\
+Administration RDP & 3389 & Instance Windows & Administration distante (My IP) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Captures des Security Groups}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-21-assets-sg-zabbix-server.png}
+  \caption{Security Group du serveur Zabbix (HTTP/HTTPS, 10051, SSH).}
+  \label{fig:sg-zabbix}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-09-assets-sg-linux-client.png}
+  \caption{Security Group du client Linux (SSH + 10050 depuis le serveur Zabbix).}
+  \label{fig:sg-linux}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-08-assets-sg-windows-client.png}
+  \caption{Security Group du client Windows (RDP + 10050 depuis le serveur Zabbix).}
+  \label{fig:sg-windows}
+\end{figure}
+
+\section{Schéma réseau}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/vpc.png}
+  \caption{Schéma réseau : VPC (10.0.0.0/16), Subnet public (10.0.1.0/24), IGW et routage.}
+  \label{fig:vpc}
+\end{figure}
+
+% =====================================================
+% 4. Instances EC2
+% =====================================================
+\chapter{Instances EC2}
+
+\section{Tableau récapitulatif des instances}
+Les instances EC2 déployées sont conformes aux types autorisés et recommandés par le lab.
+
+\begin{table}[H]
+\centering
+\caption{Récapitulatif des instances EC2 du projet}
+\label{tab:ec2}
+\begin{tabular}{@{}p{3.8cm}p{2.2cm}p{3.4cm}p{2.2cm}p{2.2cm}p{4.2cm}@{}}
+\toprule
+\textbf{Rôle} & \textbf{Type} & \textbf{OS} & \textbf{CPU (vCPU)} & \textbf{RAM (GiB)} & \textbf{Fonction} \\
+\midrule
+Serveur Zabbix & t3.large & Ubuntu 22.04 & 2 & 8 & Héberge Docker : Zabbix Server + Web + DB \\
+Client Linux & t3.medium & Ubuntu 22.04 & 2 & 4 & Agent Zabbix : métriques système Linux \\
+Client Windows & t3.large & Windows Server & 2 & 8 & Agent Zabbix : métriques Windows (plus gourmand) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Justification des choix t3.medium / t3.large}
+\begin{itemize}
+  \item \textbf{Serveur Zabbix (t3.large)} : la conteneurisation (serveur + web + base) nécessite une marge de CPU/RAM pour éviter les lenteurs.
+  \item \textbf{Client Linux (t3.medium)} : l’agent Zabbix est léger et les charges de test restent modérées.
+  \item \textbf{Client Windows (t3.large)} : Windows Server consomme davantage de ressources ; ce type améliore la fluidité (RDP et services).
+\end{itemize}
+
+\section{Captures d’écran (lancement et état Running)}
+Cette partie illustre la création des instances, puis la vérification de leur état. Dans un contexte de lab, il est important de contrôler :
+\begin{itemize}
+  \item le \textbf{type d’instance} (t3.medium/t3.large),
+  \item la \textbf{région} (us-east-1),
+  \item l’\textbf{adresse IP publique} (pour l’accès Web/SSH/RDP),
+  \item et le \textbf{Security Group} associé.
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-19-assets-creating-zabbix-sever-instance.png}
+  \caption{Lancement de l’instance Zabbix Server (Ubuntu 22.04, t3.large).}
+  \label{fig:ec2-create-zabbix}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-25-assets-creating-linux-client-instance.png}
+  \caption{Lancement de l’instance client Linux (Ubuntu 22.04, t3.medium).}
+  \label{fig:ec2-create-linux}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-13-assets-creating-windows-instance.png}
+  \caption{Lancement de l’instance Windows Server (t3.large).}
+  \label{fig:ec2-create-windows}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/ec2-1.png}
+  \caption{Vue globale des 3 instances EC2 (serveur Zabbix + clients Linux/Windows).}
+  \label{fig:ec2}
+\end{figure}
+
+\section{Configuration réseau des instances (Edit network)}
+Après le lancement, il peut être nécessaire de vérifier (ou ajuster) la configuration réseau de chaque instance : VPC, subnet, et paramètres d’interface réseau. Les captures suivantes illustrent ce contrôle \textit{après création}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-26-assets-config-network-vpc-with-zabbix-sever.png}
+  \caption{Configuration réseau : vérification/édition réseau de l’instance Zabbix Server (VPC/Subnet).}
+  \label{fig:vpc-zabbix-placement}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-28-assets-config-network-vpc-with-client-linux.png}
+  \caption{Configuration réseau : vérification/édition réseau du client Linux (VPC/Subnet).}
+  \label{fig:vpc-linux-placement}
+\end{figure}
+
+% =====================================================
+% 5. Déploiement du serveur Zabbix (Docker)
+% =====================================================
+\chapter{Déploiement du serveur Zabbix (Docker)}
+
+\section{Installation Docker}
+Sur Ubuntu 22.04, Docker est installé via le dépôt officiel. Les commandes suivantes illustrent une procédure type.
+
+\begin{lstlisting}[style=bash,caption={Installation de Docker sur Ubuntu (serveur Zabbix)}]
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable --now docker
+\end{lstlisting}
+
+\section{Installation Docker Compose}
+Docker Compose est utilisé via le plugin officiel \texttt{docker compose}. Cela évite d’ajouter une dépendance externe supplémentaire.
+
+\section{Fichier docker-compose.yml expliqué}
+Le déploiement est réalisé via un fichier Compose contenant :
+\begin{itemize}
+  \item \textbf{PostgreSQL} : base de données Zabbix.
+  \item \textbf{Zabbix Server} : service principal (port 10051).
+  \item \textbf{Zabbix Web} : interface Web (exposée sur le port 80 de l’instance).
+\end{itemize}
+
+\begin{lstlisting}[style=yaml,caption={Fichier docker-compose.yml (extrait du projet)}]
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: zabbix-postgres
+    environment:
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:alpine-7.0-latest
+    container_name: zabbix-server
+    depends_on:
+      - postgres
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+    ports:
+      - "10051:10051"
+    restart: unless-stopped
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-7.0-latest
+    container_name: zabbix-web
+    depends_on:
+      - postgres
+      - zabbix-server
+    environment:
+      DB_SERVER_HOST: postgres
+      POSTGRES_DB: zabbix
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: zabbixpass
+      ZBX_SERVER_HOST: zabbix-server
+      PHP_TZ: Africa/Casablanca
+    ports:
+      - "80:8080"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-20-assets-create-docker-compose.png}
+  \caption{Création du fichier \texttt{docker-compose.yml} sur le serveur Zabbix.}
+  \label{fig:compose-create}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-11-assets-building-image.png}
+  \caption{Téléchargement/initialisation des images Docker (premier lancement des services).}
+  \label{fig:docker-images}
+\end{figure}
+
+\section{Lancement des conteneurs}
+\begin{lstlisting}[style=bash,caption={Démarrage des conteneurs Zabbix}]
+cd /chemin/vers/le/projet
+docker compose up -d
+docker compose ps
+\end{lstlisting}
+
+\section{Vérification de l’interface Web}
+Une fois les conteneurs démarrés, l’interface est accessible via : \texttt{http://<IP-Publique-Serveur-Zabbix>/}.
+
+Le point de contrôle attendu ici est simple :
+\begin{itemize}
+  \item le navigateur affiche la page d’authentification Zabbix,
+  \item les conteneurs \texttt{zabbix-server} et \texttt{zabbix-web} sont \textit{Up},
+  \item et le port 80 est bien autorisé dans le Security Group du serveur.
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/zabbix-login.png}
+  \caption{Vérification : accès à l’interface Web Zabbix.}
+  \label{fig:zabbix-login}
+\end{figure}
+
+% =====================================================
+% 6. Configuration agents
+% =====================================================
+\chapter{Configuration des agents}
+
+\section{Agent Zabbix sur Linux (Ubuntu)}
+L’agent Linux a pour rôle d’exposer des métriques système (CPU, mémoire, disque, services). Le serveur Zabbix interroge l’agent sur le port 10050.
+\subsection{Installation}
+\begin{lstlisting}[style=bash,caption={Installation de l’agent Zabbix sur Ubuntu}]
+sudo apt update
+sudo apt install -y zabbix-agent2
+sudo systemctl enable --now zabbix-agent2
+sudo systemctl status zabbix-agent2 --no-pager
+\end{lstlisting}
+
+\subsection{Configuration : zabbix\_agent2.conf (extrait)}
+Le paramétrage essentiel consiste à déclarer le serveur Zabbix autorisé et le nom d’hôte.
+
+\begin{lstlisting}[style=ini,caption={Extrait de configuration agent Linux (Server/ServerActive/Hostname)}]
+Server=10.0.1.<IP_PRIVEE_ZABBIX_SERVER>
+ServerActive=10.0.1.<IP_PRIVEE_ZABBIX_SERVER>
+Hostname=MohamedAASSOU-Client-Linux
+\end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{\imgpath/agent-linux.png}
+  \caption{Configuration de l’agent Zabbix sur Linux (extrait de configuration).}
+  \label{fig:agent-linux}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-29-assets-connectviasshsurclientlinux.png}
+  \caption{Connexion SSH au client Linux pour installation et configuration de l’agent.}
+  \label{fig:ssh-linux}
+\end{figure}
+
+\section{Agent Zabbix sur Windows Server}
+\subsection{Installation MSI et paramètres}
+L’agent Zabbix peut être installé via un exécutable MSI. Lors de l’installation, il faut renseigner :
+\begin{itemize}
+  \item \textbf{Server} : IP privée du serveur Zabbix (dans le VPC).
+  \item \textbf{Hostname} : nom strictement identique à celui déclaré dans l’interface Zabbix.
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-24-assets-connecttowindowsserver.png}
+  \caption{Connexion RDP au serveur Windows pour finaliser l’installation de l’agent.}
+  \label{fig:rdp-windows}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{\imgpath/agent-win.png}
+  \caption{Installation et configuration de l’agent Zabbix sur Windows Server.}
+  \label{fig:agent-win}
+\end{figure}
+
+% =====================================================
+% 7. Monitoring & Dashboard
+% =====================================================
+\chapter{Monitoring \& Dashboard}
+
+\section{Ajout des hôtes}
+Dans l’interface Zabbix, l’ajout des hôtes suit une logique identique : définir un \textit{Host name}, associer une interface \textit{Agent} (IP privée du client, port 10050) et sélectionner un template correspondant (Linux/Windows).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-23-assets-addhost-lonix-zabbix.png}
+  \caption{Ajout d’un hôte dans Zabbix (exemple : client Linux).}
+  \label{fig:add-host}
+\end{figure}
+
+\section{Validation : statut ZBX en vert}
+Lorsque les ports sont correctement ouverts et l’agent opérationnel, Zabbix indique la disponibilité en vert (ZBX).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-12-assets-statut-zbx-vert-pour-linux-windows.png}
+  \caption{Validation de la connectivité : statut ZBX en vert pour Linux et Windows.}
+  \label{fig:zbx-green}
+\end{figure}
+
+\section{Graphiques CPU/RAM et tableaux de bord}
+Les graphiques permettent de suivre l’évolution des ressources et d’illustrer la collecte effective des métriques.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-15-assets-monitoring.png}
+  \caption{Monitoring : consultation des dernières données (Latest data).}
+  \label{fig:latest-data}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/figure-27-assets-monitoring-graphe-client-linux.png}
+  \caption{Exemple de graphique CPU/RAM (preuve de collecte effective).}
+  \label{fig:cpu-ram-graph}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/dashboard1.png}
+  \caption{Tableau de bord Zabbix : vue synthétique de supervision.}
+  \label{fig:dash1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{\imgpath/dashboard2.png}
+  \caption{Dashboard final : état global et indicateurs principaux.}
+  \label{fig:dash2}
+\end{figure}
+
+% =====================================================
+% 8. Difficultés rencontrées & solutions
+% =====================================================
+\chapter{Difficultés rencontrées \& solutions}
+
+\section{Ports bloqués / accès réseau}
+\textbf{Problème :} les hôtes apparaissent indisponibles (pas de données, ZBX rouge) si les ports 10050/10051 ne sont pas correctement autorisés.
+
+\textbf{Solution :} vérifier les règles des Security Groups, limiter les sources (My IP pour SSH/RDP/Web) et autoriser 10050 depuis le serveur Zabbix vers les clients.
+
+\section{Docker indisponible après arrêt/redémarrage du lab}
+\textbf{Problème :} après un \textit{Stop} des instances ou un arrêt automatique, les conteneurs peuvent ne pas être actifs.
+
+\textbf{Solution :}
+\begin{lstlisting}[style=bash,caption={Relance des conteneurs après redémarrage}]
+cd /chemin/vers/le/projet
+docker compose up -d
+docker compose ps
+\end{lstlisting}
+
+\section{Limitations du Learner Lab}
+\begin{itemize}
+  \item \textbf{Région :} privilégier \texttt{us-east-1 (N. Virginia)}.
+  \item \textbf{Types d’instances :} rester sur \texttt{t3.medium} et \texttt{t3.large}.
+  \item \textbf{Budget :} surveiller la consommation (environ 50\$) et arrêter les instances hors sessions.
+  \item \textbf{Arrêt automatique :} anticiper les redémarrages et relancer Docker Compose.
+\end{itemize}
+
+% =====================================================
+% 9. Conclusion
+% =====================================================
+\chapter{Conclusion}
+
+Le projet a abouti à la mise en place d’une infrastructure de supervision centralisée sur AWS, capable de monitorer un environnement hybride Linux et Windows via Zabbix.
+
+\section{Résumé des résultats}
+\begin{itemize}
+  \item Architecture réseau opérationnelle (VPC + subnet public + IGW + routage).
+  \item Déploiement Zabbix conteneurisé reproductible via Docker Compose.
+  \item Agents Linux et Windows intégrés, supervision validée par les dashboards et métriques.
+\end{itemize}
+
+\section{Bénéfices du monitoring hybride}
+Une supervision unique permet d’unifier les indicateurs, de réduire le temps de diagnostic et d’améliorer la disponibilité globale des services.
+
+\section{Améliorations futures possibles}
+\begin{itemize}
+  \item Segmentation plus avancée : subnets privés, bastion, VPN.
+  \item Gestion sécurisée des secrets (SSM / Secrets Manager).
+  \item Haute disponibilité (base managée, sauvegardes, redondance).
+  \item Notifications (mail, Teams, Slack) et règles d’alerting plus fines.
+\end{itemize}
+
+
+% =====================================================
+\end{document}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Schéma Infrastructure AWS Zabbix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .box {
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px auto;
+            background: white;
+            width: 70%;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .subnet-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .instance {
+            border: 2px solid #555;
+            border-radius: 10px;
+            width: 28%;
+            padding: 15px;
+            background: #fff;
+        }
+
+        .instance h3 {
+            margin: 0;
+            background: #333;
+            color: white;
+            padding: 6px;
+            border-radius: 5px;
+        }
+
+        .arrow {
+            font-size: 30px;
+            margin: 10px 0;
+        }
+
+        .arrow-down {
+            display: block;
+        }
+
+        .color-server {
+            background: #ffebe6;
+        }
+
+        .color-client1 {
+            background: #e6f7ff;
+        }
+
+        .color-client2 {
+            background: #f9e6ff;
+        }
+
+        .connection {
+            margin-top: 30px;
+            font-weight: bold;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body>
+    <main role="main">
+
+    <!-- AWS CLOUD -->
+    <div class="box">
+        <h1 class="title">AWS Cloud (us-east-1 — N. Virginia)</h1>
+        <p>VPC : <strong>10.0.0.0/16</strong></p>
+    </div>
+
+    <div class="arrow arrow-down" aria-hidden="true">▼</div>
+    <p><strong>Internet Gateway</strong> (<abbr title="Internet Gateway">IGW</abbr>)</p>
+
+    <div class="arrow arrow-down" aria-hidden="true">▼</div>
+
+    <!-- SUBNET -->
+    <div class="box">
+        <h2 class="title">Subnet Public (10.0.1.0/24)</h2>
+    </div>
+
+    <!-- 3 INSTANCES -->
+    <div class="subnet-row">
+
+        <!-- Zabbix Server -->
+        <div class="instance color-server">
+            <h3>EC2 Zabbix Server</h3>
+            <p>Ubuntu 22.04<br>t3.large</p>
+            <hr>
+            <p>Public IP: ✔<br>Private IP: 10.0.1.x</p>
+            <hr>
+            <p><strong>Docker Containers :</strong></p>
+            <ul style="text-align:left; margin: 0 0 10px 0;">
+                <li>Zabbix Server</li>
+                <li>Zabbix Web (HTTP/HTTPS)</li>
+                <li>MariaDB</li>
+            </ul>
+            <p><strong>Security Group (inbound) :</strong></p>
+            <ul style="text-align:left; margin: 0;">
+                <li>80/443 (Web UI)</li>
+                <li>10051 (Zabbix Server)</li>
+                <li>22 (SSH — My IP)</li>
+            </ul>
+        </div>
+
+        <!-- Client Linux -->
+        <div class="instance color-client1">
+            <h3>EC2 Client Linux</h3>
+            <p>Ubuntu 22.04<br>t3.medium</p>
+            <hr>
+            <p>Public IP: ✔<br>Private IP: 10.0.1.x</p>
+            <hr>
+            <p><strong>Zabbix Agent2</strong></p>
+            <ul style="text-align:left; margin: 0;">
+               <li>10050 → Zabbix Server</li>
+               <li>22 (SSH — My IP)</li>
+            </ul>
+        </div>
+
+        <!-- Client Windows -->
+        <div class="instance color-client2">
+            <h3>EC2 Client Windows</h3>
+            <p>Windows Server<br>t3.large</p>
+            <hr>
+            <p>Public IP: ✔<br>Private IP: 10.0.1.x</p>
+            <hr>
+            <p><strong>Zabbix Agent2</strong></p>
+            <ul style="text-align:left; margin: 0;">
+               <li>10050 → Zabbix Server</li>
+               <li>3389 (RDP — My IP)</li>
+               <li>Hostname configuré</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- CONNECTIONS -->
+    <div class="connection">
+        Flux: <strong>Agents (10050)</strong> → <strong>Serveur (10051)</strong>
+    </div>
+</main>
+</body>
+</html>

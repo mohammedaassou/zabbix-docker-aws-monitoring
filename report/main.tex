@@ -1,36 +1,165 @@
 \documentclass[12pt,a4paper]{report}
 
-% Encoding and language
+% =====================================================
+% ENCODING & LANGUAGE
+% =====================================================
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
 
-% Page layout
-\usepackage[a4paper,margin=2.5cm]{geometry}
+% =====================================================
+% FONTS - Professional Typography
+% =====================================================
+\usepackage{lmodern}
+\usepackage{charter}
+\usepackage[sfdefault]{inter}
+\usepackage[scaled=0.95]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% =====================================================
+% PAGE LAYOUT & GEOMETRY
+% =====================================================
+\usepackage[a4paper,
+            top=2.5cm,
+            bottom=2.5cm,
+            left=2.8cm,
+            right=2.8cm,
+            headheight=16pt]{geometry}
 \usepackage{setspace}
 \onehalfspacing
 
-% Graphics and floats
+% =====================================================
+% COLORS - Professional Palette
+% =====================================================
+\usepackage[dvipsnames,table]{xcolor}
+\definecolor{primary}{RGB}{0, 82, 155}
+\definecolor{secondary}{RGB}{220, 53, 69}
+\definecolor{accent}{RGB}{40, 167, 69}
+\definecolor{darkblue}{RGB}{13, 71, 161}
+\definecolor{lightblue}{RGB}{227, 242, 253}
+\definecolor{tableheader}{RGB}{13, 71, 161}
+\definecolor{tableodd}{RGB}{245, 247, 250}
+\definecolor{tableeven}{RGB}{255, 255, 255}
+\definecolor{bordercolor}{RGB}{189, 189, 189}
+\definecolor{codecolor}{RGB}{248, 249, 250}
+\definecolor{framebg}{RGB}{240, 248, 255}
+
+% =====================================================
+% GRAPHICS & FLOATS
+% =====================================================
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage{caption}
+\usepackage[font={small,sf},
+            labelfont={bf,color=darkblue},
+            justification=centering,
+            format=hang]{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
 
-% Tables
+% =====================================================
+% TABLES - Professional Formatting
+% =====================================================
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{tabularx}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+\usepackage{colortbl}
+\usepackage{makecell}
 
-% Links
-\usepackage[hidelinks]{hyperref}
+% Better table spacing
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{10pt}
+
+% =====================================================
+% BOXES AND FRAMES
+% =====================================================
+\usepackage[most]{tcolorbox}
+\usepackage{mdframed}
+
+% Professional info box
+\newtcolorbox{infobox}[1][]{
+  colback=lightblue,
+  colframe=primary,
+  fonttitle=\bfseries\sffamily,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  #1
+}
+
+% Warning box
+\newtcolorbox{warningbox}[1][]{
+  colback=yellow!10,
+  colframe=secondary,
+  fonttitle=\bfseries\sffamily,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  #1
+}
+
+% Success box
+\newtcolorbox{successbox}[1][]{
+  colback=green!5,
+  colframe=accent,
+  fonttitle=\bfseries\sffamily,
+  coltitle=white,
+  boxrule=1.5pt,
+  arc=3pt,
+  #1
+}
+
+% =====================================================
+% HYPERREFERENCES
+% =====================================================
+\usepackage[colorlinks=true,
+            linkcolor=darkblue,
+            citecolor=secondary,
+            urlcolor=primary,
+            pdfauthor={Mohamed AASSOU},
+            pdftitle={Infrastructure Cloud AWS - Supervision Zabbix},
+            bookmarks=true,
+            bookmarksopen=true]{hyperref}
 \usepackage{bookmark}
 
-% Code listings
-\usepackage{xcolor}
+% =====================================================
+% LISTS & ENUMERATIONS
+% =====================================================
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=5pt, leftmargin=*, itemsep=3pt}
+\setlist[enumerate]{noitemsep, topsep=5pt, leftmargin=*, itemsep=3pt}
+
+% =====================================================
+% CODE LISTINGS - Enhanced
+% =====================================================
 \usepackage{listings}
-% Make listings robust with UTF-8 accented characters (pdflatex)
+
 \lstset{
   inputencoding=utf8,
   extendedchars=true,
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codecolor},
+  frame=single,
+  framerule=0pt,
+  rulecolor=\color{bordercolor},
+  framesep=8pt,
+  framexleftmargin=8pt,
+  breaklines=true,
+  columns=fullflexible,
+  showstringspaces=false,
+  tabsize=2,
+  captionpos=b,
+  belowcaptionskip=10pt,
+  aboveskip=15pt,
+  belowskip=10pt,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
   literate=
     {á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ä}{{\"a}}1
     {Á}{{\'A}}1 {À}{{\`A}}1 {Â}{{\^A}}1 {Ä}{{\"A}}1
@@ -44,341 +173,506 @@
     {ú}{{\'u}}1 {ù}{{\`u}}1 {û}{{\^u}}1 {ü}{{\"u}}1
     {Ú}{{\'U}}1 {Ù}{{\`U}}1 {Û}{{\^U}}1 {Ü}{{\"U}}1
 }
+
 \lstdefinestyle{bash}{
-  basicstyle=\ttfamily\small,
-  backgroundcolor=\color{gray!7},
-  frame=single,
-  breaklines=true,
-  columns=fullflexible
+  language=bash,
+  keywordstyle=\color{primary}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{accent}
 }
+
 \lstdefinestyle{yaml}{
-  basicstyle=\ttfamily\small,
-  backgroundcolor=\color{gray!7},
-  frame=single,
-  breaklines=true,
-  columns=fullflexible
+  keywordstyle=\color{primary}\bfseries,
+  commentstyle=\color{gray}\itshape,
+  stringstyle=\color{accent}
 }
+
 \lstdefinestyle{ini}{
-  basicstyle=\ttfamily\small,
-  backgroundcolor=\color{gray!7},
-  frame=single,
-  breaklines=true,
-  columns=fullflexible
+  keywordstyle=\color{primary}\bfseries,
+  commentstyle=\color{gray}\itshape
 }
 
-% Convenience for figures
-\newcommand{\imgpath}{../images}
+% =====================================================
+% HEADERS & FOOTERS
+% =====================================================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\sffamily\itshape\nouppercase{\leftmark}}
+\fancyhead[R]{\footnotesize\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{primary}\leaders\hrule height \headrulewidth\hfill}}
 
+% =====================================================
+% TITLE FORMATTING
+% =====================================================
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\sffamily\color{darkblue}}
+  {\filleft\MakeUppercase{\chaptertitlename}\ \thechapter}
+  {10pt}
+  {\filleft\Huge}
+  [\vspace{2pt}{\titlerule[2pt]}]
+\titlespacing*{\chapter}{0pt}{-20pt}{30pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\sffamily\color{darkblue}}
+  {\thesection}
+  {1em}
+  {}
+  [\vspace{-8pt}{\color{primary}\titlerule[1pt]}]
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\sffamily\color{primary}}
+  {\thesubsection}
+  {1em}
+  {}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
+
+% =====================================================
+% CUSTOM COMMANDS
+% =====================================================
+\newcommand{\imgpath}{../images}
+\newcommand{\code}[1]{\texttt{\color{primary!90!black}#1}}
+\newcommand{\aws}[1]{\textbf{\color{primary}#1}}
+\newcommand{\important}[1]{\textbf{\color{secondary}#1}}
+\newcommand{\success}[1]{\textbf{\color{accent}#1}}
+
+% Professional table command
+\newcommand{\prohead}[1]{\textbf{\color{white}#1}}
+
+% =====================================================
+% DOCUMENT START
+% =====================================================
 \begin{document}
 
-% Avoid duplicate PDF destinations by separating front matter numbering
+% =====================================================
+% TITLE PAGE - Professional Design
+% =====================================================
 \pagenumbering{gobble}
 
-% =====================================================
-% 1. Page de garde
-% =====================================================
 \begin{titlepage}
   \begin{center}
-
-    \vspace*{0.5cm}
-
-    % Logo (placeholder /images/logo.png)
-    \includegraphics[width=0.35\textwidth]{\imgpath/logo.png}\\[1.0cm]
-
-    {\LARGE\bfseries Mise en œuvre d’une infrastructure cloud de supervision centralisée sous AWS}\\[0.3cm]
-    {\large\bfseries Déploiement de Zabbix conteneurisé (Docker) pour le monitoring d’un parc hybride (Linux \& Windows)}\\[1.0cm]
-
-    \begin{tabular}{rl}
-      \textbf{Nom étudiant :} & Mohamed AASSOU \\
-      \textbf{Encadrant :} & Prof. Azeddine KHIAT \\
-      \textbf{Filière :} & 2ANCI - Génie Informatique \\
-      \textbf{Année universitaire :} & 2025/2026 \\
-    \end{tabular}
-
-    \vspace{0.3cm}
-    {\small\textbf{Dépôt GitHub :} \url{https://github.com/mohammedaassou/zabbix-docker-aws-monitoring.git}}
-
+    
+    % Top border decoration
+    {\color{primary}\rule{\textwidth}{3pt}}
+    \vspace{0.5cm}
+    
+    % Logo
+    \includegraphics[width=0.35\textwidth]{\imgpath/logo.png}\\[1.5cm]
+    
+    % Main title in colored box
+    \begin{tcolorbox}[
+      colback=lightblue,
+      colframe=darkblue,
+      boxrule=2pt,
+      arc=5pt,
+      width=0.95\textwidth,
+      halign=center,
+      valign=center,
+      boxsep=10pt
+    ]
+      {\Huge\bfseries\color{darkblue} 
+        Mise en œuvre d'une infrastructure\\[0.3cm]
+        cloud de supervision centralisée\\[0.3cm]
+        sous AWS}
+    \end{tcolorbox}
+    
+    \vspace{0.8cm}
+    
+    % Subtitle
+    \begin{tcolorbox}[
+      colback=white,
+      colframe=primary,
+      boxrule=1.5pt,
+      arc=3pt,
+      width=0.85\textwidth,
+      halign=center
+    ]
+      {\Large\bfseries\color{primary}
+        Déploiement de Zabbix conteneurisé (Docker)\\[0.2cm]
+        pour le monitoring d'un parc hybride\\[0.2cm]
+        (Linux \& Windows)}
+    \end{tcolorbox}
+    
+    \vspace{1.2cm}
+    
+    % Student information in professional table
+    \begin{tcolorbox}[
+      colback=white,
+      colframe=bordercolor,
+      boxrule=1pt,
+      arc=2pt,
+      width=0.7\textwidth
+    ]
+      \begin{tabular}{@{}>{\bfseries\color{darkblue}}l@{\hspace{1.5em}}l@{}}
+        Nom étudiant : & Mohamed AASSOU \\[4pt]
+        Encadrant : & Prof. Azeddine KHIAT \\[4pt]
+        Filière : & 2ANCI - Génie Informatique \\[4pt]
+        Année universitaire : & 2025/2026 \\
+      \end{tabular}
+    \end{tcolorbox}
+    
+    \vspace{0.8cm}
+    
+    % GitHub repository
+    \begin{tcolorbox}[
+      colback=codecolor,
+      colframe=primary,
+      boxrule=1pt,
+      arc=2pt,
+      width=0.85\textwidth,
+      halign=center
+    ]
+      {\small\textbf{\color{darkblue}Dépôt GitHub :}\\[4pt]
+      \url{https://github.com/mohammedaassou/zabbix-docker-aws-monitoring.git}}
+    \end{tcolorbox}
+    
     \vfill
-
-    % Image du projet (/images/project-cover.png)
-    \includegraphics[width=0.90\textwidth]{\imgpath/project-cover.png}\\[0.5cm]
-    {\small\textit{Figure de couverture : aperçu de l’architecture globale du projet.}}
-
+    
+    % Cover image
+    \includegraphics[width=0.85\textwidth]{\imgpath/project-cover.png}\\[0.3cm]
+    {\small\itshape\color{gray}Figure de couverture : aperçu de l'architecture globale du projet.}
+    
+    \vspace{0.8cm}
+    
+    % Bottom decoration
+    {\color{primary}\rule{\textwidth}{3pt}}
+    \vspace{0.3cm}
+    
+    {\large\bfseries\color{darkblue}
+      Rapport de Projet de Fin d'Études}
+    
   \end{center}
 \end{titlepage}
 
 \clearpage
 \pagenumbering{roman}
 
+% =====================================================
+% TABLE OF CONTENTS
+% =====================================================
 \tableofcontents
-\listoffigures
-\listoftables
-\clearpage
+\addcontentsline{toc}{chapter}{Table des matières}
 
+\clearpage
+\listoffigures
+\addcontentsline{toc}{chapter}{Liste des figures}
+
+\clearpage
+\listoftables
+\addcontentsline{toc}{chapter}{Liste des tableaux}
+
+\clearpage
 \pagenumbering{arabic}
 
 % =====================================================
-% 2. Introduction
+% CHAPTER 1: INTRODUCTION
 % =====================================================
 \chapter{Introduction}
 
 \section{Contexte}
-Dans les infrastructures informatiques modernes, les systèmes d’exploitation Linux et Windows cohabitent fréquemment. Cette hétérogénéité complique la supervision : les méthodes d’accès, les services, et les outils de collecte diffèrent. Une solution de monitoring centralisée permet de détecter rapidement les incidents, de suivre l’évolution des ressources (CPU, RAM, disque, réseau) et de garantir un niveau de disponibilité satisfaisant.
 
-Le cloud AWS offre un environnement standardisé pour déployer rapidement un serveur de supervision accessible, tout en appliquant des règles de sécurité cohérentes via les 
-\textit{Security Groups}. Dans ce projet, la plateforme Zabbix est déployée sous forme de conteneurs Docker afin de faciliter la reproductibilité et la maintenance.
+Dans les infrastructures informatiques modernes, les systèmes d'exploitation Linux et Windows cohabitent fréquemment. Cette hétérogénéité complique la supervision : les méthodes d'accès, les services, et les outils de collecte diffèrent. Une solution de monitoring centralisée permet de détecter rapidement les incidents, de suivre l'évolution des ressources (CPU, RAM, disque, réseau) et de garantir un niveau de disponibilité satisfaisant.
+
+Le cloud \aws{AWS} offre un environnement standardisé pour déployer rapidement un serveur de supervision accessible, tout en appliquant des règles de sécurité cohérentes via les \important{Security Groups}. Dans ce projet, la plateforme Zabbix est déployée sous forme de conteneurs Docker afin de faciliter la reproductibilité et la maintenance.
 
 \section{Objectifs techniques}
+
 Les objectifs du projet sont les suivants :
+
 \begin{itemize}
-  \item Concevoir une architecture réseau AWS simple et conforme : un VPC, un subnet public, une Internet Gateway et une route table.
-  \item Déployer un serveur Zabbix conteneurisé (Docker) dans AWS (Zabbix Server + interface Web + base de données).
-  \item Superviser un parc hybride : un client Linux (Ubuntu) et un client Windows Server, via l’installation et la configuration d’agents Zabbix.
-  \item Vérifier le bon fonctionnement par l’observation du statut des hôtes (ZBX en vert) et l’affichage de graphiques CPU/RAM.
+  \item Concevoir une architecture réseau AWS simple et conforme : un VPC, un subnet public, une Internet Gateway et une route table
+  \item Déployer un serveur Zabbix conteneurisé (Docker) dans AWS (Zabbix Server + interface Web + base de données)
+  \item Superviser un parc hybride : un client Linux (Ubuntu) et un client Windows Server, via l'installation et la configuration d'agents Zabbix
+  \item Vérifier le bon fonctionnement par l'observation du statut des hôtes (ZBX en vert) et l'affichage de graphiques CPU/RAM
 \end{itemize}
 
 \section{Technologies utilisées}
+
+\begin{infobox}[title=Stack Technologique]
 \begin{itemize}
-  \item \textbf{AWS (Learner Lab)} : VPC, Subnet, Internet Gateway, Route Table, Security Groups, EC2.
-  \item \textbf{Docker \& Docker Compose} : déploiement reproductible des services Zabbix.
-  \item \textbf{Zabbix} : collecte de métriques et visualisation (tableaux de bord).
-  \item \textbf{Ubuntu 22.04} : OS du serveur Zabbix et du client Linux.
-  \item \textbf{Windows Server} : OS du client Windows.
+  \item \textbf{\aws{AWS (Learner Lab)}} : VPC, Subnet, Internet Gateway, Route Table, Security Groups, EC2
+  \item \textbf{Docker \& Docker Compose} : déploiement reproductible des services Zabbix
+  \item \textbf{Zabbix} : collecte de métriques et visualisation (tableaux de bord)
+  \item \textbf{Ubuntu 22.04} : OS du serveur Zabbix et du client Linux
+  \item \textbf{Windows Server} : OS du client Windows
 \end{itemize}
+\end{infobox}
 
 % =====================================================
-% 3. Architecture réseau
+% CHAPTER 2: ARCHITECTURE RÉSEAU
 % =====================================================
 \chapter{Architecture réseau}
 
 \section{Description du VPC, subnet, IGW et route table}
-L’architecture réseau est construite autour d’un VPC unique, avec un subnet public permettant un accès direct à Internet (sans VPN), conformément aux contraintes du lab.
 
-L’objectif de cette partie est de démontrer :
+L'architecture réseau est construite autour d'un VPC unique, avec un subnet public permettant un accès direct à Internet (sans VPN), conformément aux contraintes du lab.
+
+L'objectif de cette partie est de démontrer :
 \begin{itemize}
-  \item la \textbf{segmentation réseau} (VPC + subnet),
-  \item la \textbf{connectivité Internet} (IGW + route par défaut),
-  \item et la \textbf{sécurisation} (Security Groups) en ouvrant uniquement les ports nécessaires.
+  \item la \important{segmentation réseau} (VPC + subnet)
+  \item la \important{connectivité Internet} (IGW + route par défaut)
+  \item et la \important{sécurisation} (Security Groups) en ouvrant uniquement les ports nécessaires
 \end{itemize}
 
 \subsection{Adressage IP}
+
+\begin{successbox}[title=Configuration Réseau]
 \begin{itemize}
-  \item \textbf{VPC} : CIDR \texttt{10.0.0.0/16}
-  \item \textbf{Subnet public} : CIDR \texttt{10.0.1.0/24}
+  \item \textbf{VPC} : CIDR \code{10.0.0.0/16}
+  \item \textbf{Subnet public} : CIDR \code{10.0.1.0/24}
 \end{itemize}
+\end{successbox}
 
 \subsection{Connectivité Internet}
+
 \begin{itemize}
-  \item Une \textbf{Internet Gateway (IGW)} est attachée au VPC.
-  \item Une \textbf{Route Table} associée au subnet public contient la route par défaut \texttt{0.0.0.0/0} pointant vers l’IGW.
+  \item Une \important{Internet Gateway (IGW)} est attachée au VPC
+  \item Une \important{Route Table} associée au subnet public contient la route par défaut \code{0.0.0.0/0} pointant vers l'IGW
 \end{itemize}
 
 \subsection{Captures de configuration réseau}
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-18-assets-vpc-creation.png}
-  \caption{Création du VPC (CIDR 10.0.0.0/16).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-18-assets-vpc-creation.png}
+  \caption{Création du VPC (CIDR 10.0.0.0/16)}
   \label{fig:vpc-create}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-17-assets-subnet-create.png}
-  \caption{Création du subnet public (10.0.1.0/24).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-17-assets-subnet-create.png}
+  \caption{Création du subnet public (10.0.1.0/24)}
   \label{fig:subnet-create}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-22-assets-subnet-view.png}
-  \caption{Vérification du subnet (association et paramètres du subnet public).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-22-assets-subnet-view.png}
+  \caption{Vérification du subnet (association et paramètres du subnet public)}
   \label{fig:subnet-view}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-14-assets-routetable.png}
-  \caption{Route Table : route par défaut \texttt{0.0.0.0/0} vers l’Internet Gateway.}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-14-assets-routetable.png}
+  \caption{Route Table : route par défaut \texttt{0.0.0.0/0} vers l'Internet Gateway}
   \label{fig:routetable}
 \end{figure}
 
 \section{Security Groups : tableau des ports}
+
 Les règles de sécurité ouvrent uniquement les ports requis par le projet.
 
 \subsection{Principe de filtrage}
+
+\begin{warningbox}[title=Sécurité - Principe du moindre privilège]
 Les règles sont définies selon le principe du moindre privilège :
 \begin{itemize}
-  \item \textbf{Administration} (SSH/RDP/Web) limitée à \textit{My IP}.
-  \item \textbf{Monitoring} : l’agent (10050) n’accepte que les requêtes venant du serveur Zabbix.
+  \item \textbf{Administration} (SSH/RDP/Web) limitée à \textit{My IP}
+  \item \textbf{Monitoring} : l'agent (10050) n'accepte que les requêtes venant du serveur Zabbix
 \end{itemize}
+\end{warningbox}
 
 \begin{table}[H]
 \centering
 \caption{Ports autorisés par les Security Groups (synthèse)}
 \label{tab:ports}
-\begin{tabular}{@{}p{4.3cm}p{2.0cm}p{3.8cm}p{5.2cm}@{}}
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.8cm}
+                              >{\centering\arraybackslash}p{2cm}
+                              >{\raggedright\arraybackslash}p{3.5cm}
+                              >{\raggedright\arraybackslash}X}
 \toprule
-\textbf{Service / Usage} & \textbf{Port} & \textbf{Cible} & \textbf{Rôle} \\
+\rowcolor{tableheader}
+\prohead{Service / Usage} & \prohead{Port} & \prohead{Cible} & \prohead{Rôle} \\
 \midrule
-Interface Web Zabbix (HTTP/HTTPS) & 80 / 443 & Zabbix Server & Accès à l’UI depuis l’extérieur (My IP) \\
+\rowcolor{tableodd}
+Interface Web Zabbix (HTTP/HTTPS) & 80 / 443 & Zabbix Server & Accès à l'UI depuis l'extérieur (My IP) \\
+\rowcolor{tableeven}
 Zabbix Server & 10051 & Zabbix Server & Réception / échanges côté serveur \\
+\rowcolor{tableodd}
 Zabbix Agent & 10050 & Clients Linux/Windows & Collecte des métriques par le serveur Zabbix \\
+\rowcolor{tableeven}
 Administration SSH & 22 & Instances Ubuntu & Administration distante (My IP) \\
+\rowcolor{tableodd}
 Administration RDP & 3389 & Instance Windows & Administration distante (My IP) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \subsection{Captures des Security Groups}
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-21-assets-sg-zabbix-server.png}
-  \caption{Security Group du serveur Zabbix (HTTP/HTTPS, 10051, SSH).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-21-assets-sg-zabbix-server.png}
+  \caption{Security Group du serveur Zabbix (HTTP/HTTPS, 10051, SSH)}
   \label{fig:sg-zabbix}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-09-assets-sg-linux-client.png}
-  \caption{Security Group du client Linux (SSH + 10050 depuis le serveur Zabbix).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-09-assets-sg-linux-client.png}
+  \caption{Security Group du client Linux (SSH + 10050 depuis le serveur Zabbix)}
   \label{fig:sg-linux}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-08-assets-sg-windows-client.png}
-  \caption{Security Group du client Windows (RDP + 10050 depuis le serveur Zabbix).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-08-assets-sg-windows-client.png}
+  \caption{Security Group du client Windows (RDP + 10050 depuis le serveur Zabbix)}
   \label{fig:sg-windows}
 \end{figure}
 
 \section{Schéma réseau}
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/vpc.png}
-  \caption{Schéma réseau : VPC (10.0.0.0/16), Subnet public (10.0.1.0/24), IGW et routage.}
+  \fbox{\includegraphics[width=0.88\textwidth]{\imgpath/vpc.png}}
+  \caption{Schéma réseau : VPC (10.0.0.0/16), Subnet public (10.0.1.0/24), IGW et routage}
   \label{fig:vpc}
 \end{figure}
 
 % =====================================================
-% 4. Instances EC2
+% CHAPTER 3: INSTANCES EC2
 % =====================================================
 \chapter{Instances EC2}
 
 \section{Tableau récapitulatif des instances}
+
 Les instances EC2 déployées sont conformes aux types autorisés et recommandés par le lab.
 
 \begin{table}[H]
 \centering
 \caption{Récapitulatif des instances EC2 du projet}
 \label{tab:ec2}
-\begin{tabular}{@{}p{3.8cm}p{2.2cm}p{3.4cm}p{2.2cm}p{2.2cm}p{4.2cm}@{}}
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm}
+                              >{\centering\arraybackslash}p{2cm}
+                              >{\raggedright\arraybackslash}p{2.5cm}
+                              >{\centering\arraybackslash}p{1.8cm}
+                              >{\centering\arraybackslash}p{2cm}
+                              >{\raggedright\arraybackslash}X}
 \toprule
-\textbf{Rôle} & \textbf{Type} & \textbf{OS} & \textbf{CPU (vCPU)} & \textbf{RAM (GiB)} & \textbf{Fonction} \\
+\rowcolor{tableheader}
+\prohead{Rôle} & \prohead{Type} & \prohead{OS} & \prohead{vCPU} & \prohead{RAM (GiB)} & \prohead{Fonction} \\
 \midrule
+\rowcolor{tableodd}
 Serveur Zabbix & t3.large & Ubuntu 22.04 & 2 & 8 & Héberge Docker : Zabbix Server + Web + DB \\
+\rowcolor{tableeven}
 Client Linux & t3.medium & Ubuntu 22.04 & 2 & 4 & Agent Zabbix : métriques système Linux \\
+\rowcolor{tableodd}
 Client Windows & t3.large & Windows Server & 2 & 8 & Agent Zabbix : métriques Windows (plus gourmand) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \section{Justification des choix t3.medium / t3.large}
-\begin{itemize}
-  \item \textbf{Serveur Zabbix (t3.large)} : la conteneurisation (serveur + web + base) nécessite une marge de CPU/RAM pour éviter les lenteurs.
-  \item \textbf{Client Linux (t3.medium)} : l’agent Zabbix est léger et les charges de test restent modérées.
-  \item \textbf{Client Windows (t3.large)} : Windows Server consomme davantage de ressources ; ce type améliore la fluidité (RDP et services).
-\end{itemize}
 
-\section{Captures d’écran (lancement et état Running)}
-Cette partie illustre la création des instances, puis la vérification de leur état. Dans un contexte de lab, il est important de contrôler :
+\begin{infobox}[title=Dimensionnement des Instances]
 \begin{itemize}
-  \item le \textbf{type d’instance} (t3.medium/t3.large),
-  \item la \textbf{région} (us-east-1),
-  \item l’\textbf{adresse IP publique} (pour l’accès Web/SSH/RDP),
-  \item et le \textbf{Security Group} associé.
+  \item \textbf{Serveur Zabbix (t3.large)} : La conteneurisation (serveur + web + base) nécessite une marge de CPU/RAM pour éviter les lenteurs. Les 8 GiB de RAM permettent d'exécuter PostgreSQL, Zabbix Server et l'interface web simultanément sans saturation mémoire.
+  
+  \item \textbf{Client Linux (t3.medium)} : L'agent Zabbix est léger et les charges de test restent modérées. Les 4 GiB de RAM sont largement suffisants pour Ubuntu 22.04 + agent de monitoring.
+  
+  \item \textbf{Client Windows (t3.large)} : Windows Server consomme davantage de ressources au repos (\(\approx\) 2--3~GiB). Ce type améliore la fluidité (RDP et services) et garantit des performances acceptables pour la collecte de métriques.
+\end{itemize}
+\end{infobox}
+
+\section{Captures d'écran (lancement et état Running)}
+
+Cette partie illustre la création des instances, puis la vérification de leur état. Dans un contexte de lab, il est important de contrôler :
+
+\begin{itemize}
+  \item le \important{type d'instance} (t3.medium/t3.large)
+  \item la \important{région} (us-east-1)
+  \item l'\important{adresse IP publique} (pour l'accès Web/SSH/RDP)
+  \item et le \important{Security Group} associé
 \end{itemize}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-19-assets-creating-zabbix-sever-instance.png}
-  \caption{Lancement de l’instance Zabbix Server (Ubuntu 22.04, t3.large).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-19-assets-creating-zabbix-sever-instance.png}
+  \caption{Lancement de l'instance Zabbix Server (Ubuntu 22.04, t3.large)}
   \label{fig:ec2-create-zabbix}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-25-assets-creating-linux-client-instance.png}
-  \caption{Lancement de l’instance client Linux (Ubuntu 22.04, t3.medium).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-25-assets-creating-linux-client-instance.png}
+  \caption{Lancement de l'instance client Linux (Ubuntu 22.04, t3.medium)}
   \label{fig:ec2-create-linux}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-13-assets-creating-windows-instance.png}
-  \caption{Lancement de l’instance Windows Server (t3.large).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-13-assets-creating-windows-instance.png}
+  \caption{Lancement de l'instance Windows Server (t3.large)}
   \label{fig:ec2-create-windows}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/ec2-1.png}
-  \caption{Vue globale des 3 instances EC2 (serveur Zabbix + clients Linux/Windows).}
+  \includegraphics[width=0.9\textwidth]{\imgpath/ec2-1.png}
+  \caption{Vue globale des 3 instances EC2 (serveur Zabbix + clients Linux/Windows)}
   \label{fig:ec2}
 \end{figure}
 
 \section{Configuration réseau des instances (Edit network)}
-Après le lancement, il peut être nécessaire de vérifier (ou ajuster) la configuration réseau de chaque instance : VPC, subnet, et paramètres d’interface réseau. Les captures suivantes illustrent ce contrôle \textit{après création}.
+
+Après le lancement, il peut être nécessaire de vérifier (ou ajuster) la configuration réseau de chaque instance : VPC, subnet, et paramètres d'interface réseau. Les captures suivantes illustrent ce contrôle \textit{après création}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-26-assets-config-network-vpc-with-zabbix-sever.png}
-  \caption{Configuration réseau : vérification/édition réseau de l’instance Zabbix Server (VPC/Subnet).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-26-assets-config-network-vpc-with-zabbix-sever.png}
+  \caption{Configuration réseau : vérification/édition réseau de l'instance Zabbix Server (VPC/Subnet)}
   \label{fig:vpc-zabbix-placement}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-28-assets-config-network-vpc-with-client-linux.png}
-  \caption{Configuration réseau : vérification/édition réseau du client Linux (VPC/Subnet).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-28-assets-config-network-vpc-with-client-linux.png}
+  \caption{Configuration réseau : vérification/édition réseau du client Linux (VPC/Subnet)}
   \label{fig:vpc-linux-placement}
 \end{figure}
 
 % =====================================================
-% 5. Déploiement du serveur Zabbix (Docker)
+% CHAPTER 4: DÉPLOIEMENT DU SERVEUR ZABBIX (DOCKER)
 % =====================================================
 \chapter{Déploiement du serveur Zabbix (Docker)}
 
 \section{Installation Docker}
+
 Sur Ubuntu 22.04, Docker est installé via le dépôt officiel. Les commandes suivantes illustrent une procédure type.
 
-\begin{lstlisting}[style=bash,caption={Installation de Docker sur Ubuntu (serveur Zabbix)}]
-sudo apt update
-sudo apt install -y ca-certificates curl gnupg
-
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-sudo chmod a+r /etc/apt/keyrings/docker.gpg
-
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
-| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
+\begin{lstlisting}[style=bash, caption={Installation de Docker sur Ubuntu (serveur Zabbix)}]
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo systemctl enable --now docker
 \end{lstlisting}
 
 \section{Installation Docker Compose}
-Docker Compose est utilisé via le plugin officiel \texttt{docker compose}. Cela évite d’ajouter une dépendance externe supplémentaire.
+
+Docker Compose est utilisé via le plugin officiel \code{docker compose}. Cela évite d'ajouter une dépendance externe supplémentaire.
 
 \section{Fichier docker-compose.yml expliqué}
+
 Le déploiement est réalisé via un fichier Compose contenant :
+
 \begin{itemize}
-  \item \textbf{PostgreSQL} : base de données Zabbix.
-  \item \textbf{Zabbix Server} : service principal (port 10051).
-  \item \textbf{Zabbix Web} : interface Web (exposée sur le port 80 de l’instance).
+  \item \important{PostgreSQL} : base de données Zabbix
+  \item \important{Zabbix Server} : service principal (port 10051)
+  \item \important{Zabbix Web} : interface Web (exposée sur le port 80 de l'instance)
 \end{itemize}
 
-\begin{lstlisting}[style=yaml,caption={Fichier docker-compose.yml (extrait du projet)}]
+\begin{lstlisting}[style=yaml, caption={Fichier docker-compose.yml (extrait du projet)}]
+version: '3.8'
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -390,6 +684,8 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - zabbix-net
 
   zabbix-server:
     image: zabbix/zabbix-server-pgsql:alpine-7.0-latest
@@ -404,6 +700,8 @@ services:
     ports:
       - "10051:10051"
     restart: unless-stopped
+    networks:
+      - zabbix-net
 
   zabbix-web:
     image: zabbix/zabbix-web-nginx-pgsql:alpine-7.0-latest
@@ -421,58 +719,71 @@ services:
     ports:
       - "80:8080"
     restart: unless-stopped
+    networks:
+      - zabbix-net
 
 volumes:
   pgdata:
+
+networks:
+  zabbix-net:
+    driver: bridge
 \end{lstlisting}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-20-assets-create-docker-compose.png}
-  \caption{Création du fichier \texttt{docker-compose.yml} sur le serveur Zabbix.}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-20-assets-create-docker-compose.png}
+  \caption{Création du fichier \texttt{docker-compose.yml} sur le serveur Zabbix}
   \label{fig:compose-create}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-11-assets-building-image.png}
-  \caption{Téléchargement/initialisation des images Docker (premier lancement des services).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-11-assets-building-image.png}
+  \caption{Téléchargement/initialisation des images Docker (premier lancement des services)}
   \label{fig:docker-images}
 \end{figure}
 
 \section{Lancement des conteneurs}
-\begin{lstlisting}[style=bash,caption={Démarrage des conteneurs Zabbix}]
+
+\begin{lstlisting}[style=bash, caption={Démarrage des conteneurs Zabbix}]
 cd /chemin/vers/le/projet
 docker compose up -d
 docker compose ps
 \end{lstlisting}
 
-\section{Vérification de l’interface Web}
-Une fois les conteneurs démarrés, l’interface est accessible via : \texttt{http://<IP-Publique-Serveur-Zabbix>/}.
+\section{Vérification de l'interface Web}
 
+Une fois les conteneurs démarrés, l'interface est accessible via : \code{http://<IP-Publique-Serveur-Zabbix>/}.
+
+\begin{successbox}[title=Points de Contrôle]
 Le point de contrôle attendu ici est simple :
 \begin{itemize}
-  \item le navigateur affiche la page d’authentification Zabbix,
-  \item les conteneurs \texttt{zabbix-server} et \texttt{zabbix-web} sont \textit{Up},
-  \item et le port 80 est bien autorisé dans le Security Group du serveur.
+  \item Le navigateur affiche la page d'authentification Zabbix
+  \item Les conteneurs \code{zabbix-server} et \code{zabbix-web} sont \success{Up}
+  \item Le port 80 est bien autorisé dans le Security Group du serveur
 \end{itemize}
+\end{successbox}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/zabbix-login.png}
-  \caption{Vérification : accès à l’interface Web Zabbix.}
+  \includegraphics[width=0.85\textwidth]{\imgpath/zabbix-login.png}
+  \caption{Vérification : accès à l'interface Web Zabbix}
   \label{fig:zabbix-login}
 \end{figure}
 
 % =====================================================
-% 6. Configuration agents
+% CHAPTER 5: CONFIGURATION DES AGENTS
 % =====================================================
 \chapter{Configuration des agents}
 
 \section{Agent Zabbix sur Linux (Ubuntu)}
-L’agent Linux a pour rôle d’exposer des métriques système (CPU, mémoire, disque, services). Le serveur Zabbix interroge l’agent sur le port 10050.
+
+L'agent Linux a pour rôle d'exposer des métriques système (CPU, mémoire, disque, services). Le serveur Zabbix interroge l'agent sur le port 10050.
+
 \subsection{Installation}
-\begin{lstlisting}[style=bash,caption={Installation de l’agent Zabbix sur Ubuntu}]
+
+\begin{lstlisting}[style=bash, caption={Installation de l'agent Zabbix sur Ubuntu}]
 sudo apt update
 sudo apt install -y zabbix-agent2
 sudo systemctl enable --now zabbix-agent2
@@ -480,159 +791,303 @@ sudo systemctl status zabbix-agent2 --no-pager
 \end{lstlisting}
 
 \subsection{Configuration : zabbix\_agent2.conf (extrait)}
-Le paramétrage essentiel consiste à déclarer le serveur Zabbix autorisé et le nom d’hôte.
 
-\begin{lstlisting}[style=ini,caption={Extrait de configuration agent Linux (Server/ServerActive/Hostname)}]
+Le paramétrage essentiel consiste à déclarer le serveur Zabbix autorisé et le nom d'hôte.
+
+\begin{lstlisting}[style=ini, caption={Extrait de configuration agent Linux (Server/ServerActive/Hostname)}]
 Server=10.0.1.<IP_PRIVEE_ZABBIX_SERVER>
 ServerActive=10.0.1.<IP_PRIVEE_ZABBIX_SERVER>
 Hostname=MohamedAASSOU-Client-Linux
 \end{lstlisting}
 
+\begin{infobox}[title=Configuration Agent Linux]
+\textbf{Paramètres essentiels :}
+\begin{itemize}
+  \item \code{Server} : IP privée du serveur Zabbix (communications passives)
+  \item \code{ServerActive} : IP privée du serveur Zabbix (communications actives)
+  \item \code{Hostname} : doit correspondre exactement au nom déclaré dans l'interface Zabbix
+\end{itemize}
+\end{infobox}
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{\imgpath/agent-linux.png}
-  \caption{Configuration de l’agent Zabbix sur Linux (extrait de configuration).}
+  \caption{Configuration de l'agent Zabbix sur Linux (extrait de configuration)}
   \label{fig:agent-linux}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-29-assets-connectviasshsurclientlinux.png}
-  \caption{Connexion SSH au client Linux pour installation et configuration de l’agent.}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-29-assets-connectviasshsurclientlinux.png}
+  \caption{Connexion SSH au client Linux pour installation et configuration de l'agent}
   \label{fig:ssh-linux}
 \end{figure}
 
 \section{Agent Zabbix sur Windows Server}
+
 \subsection{Installation MSI et paramètres}
-L’agent Zabbix peut être installé via un exécutable MSI. Lors de l’installation, il faut renseigner :
+
+L'agent Zabbix peut être installé via un exécutable MSI. Lors de l'installation, il faut renseigner :
+
+\begin{warningbox}[title=Configuration Critique Windows]
 \begin{itemize}
-  \item \textbf{Server} : IP privée du serveur Zabbix (dans le VPC).
-  \item \textbf{Hostname} : nom strictement identique à celui déclaré dans l’interface Zabbix.
+  \item \important{Server} : IP privée du serveur Zabbix (dans le VPC)
+  \item \important{Hostname} : nom strictement identique à celui déclaré dans l'interface Zabbix
+  \item \important{Port} : 10050 (par défaut)
 \end{itemize}
+
+\textbf{Important :} Toute erreur dans le hostname empêchera la communication entre l'agent et le serveur.
+\end{warningbox}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-24-assets-connecttowindowsserver.png}
-  \caption{Connexion RDP au serveur Windows pour finaliser l’installation de l’agent.}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-24-assets-connecttowindowsserver.png}
+  \caption{Connexion RDP au serveur Windows pour finaliser l'installation de l'agent}
   \label{fig:rdp-windows}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.85\textwidth]{\imgpath/agent-win.png}
-  \caption{Installation et configuration de l’agent Zabbix sur Windows Server.}
+  \caption{Installation et configuration de l'agent Zabbix sur Windows Server}
   \label{fig:agent-win}
 \end{figure}
 
 % =====================================================
-% 7. Monitoring & Dashboard
+% CHAPTER 6: MONITORING & DASHBOARD
 % =====================================================
 \chapter{Monitoring \& Dashboard}
 
 \section{Ajout des hôtes}
-Dans l’interface Zabbix, l’ajout des hôtes suit une logique identique : définir un \textit{Host name}, associer une interface \textit{Agent} (IP privée du client, port 10050) et sélectionner un template correspondant (Linux/Windows).
+
+Dans l'interface Zabbix, l'ajout des hôtes suit une logique identique : définir un \textit{Host name}, associer une interface \textit{Agent} (IP privée du client, port 10050) et sélectionner un template correspondant (Linux/Windows).
+
+\begin{infobox}[title=Processus d'Ajout d'Hôte]
+\textbf{Étapes principales :}
+\begin{enumerate}
+  \item Naviguer vers Configuration → Hosts → Create host
+  \item Renseigner le \textbf{Host name} (doit correspondre au hostname de l'agent)
+  \item Ajouter une interface \textbf{Agent} avec l'IP privée du client
+  \item Sélectionner le template approprié :
+  \begin{itemize}
+    \item \code{Linux by Zabbix agent} pour Ubuntu
+    \item \code{Windows by Zabbix agent} pour Windows Server
+  \end{itemize}
+  \item Vérifier que le port 10050 est bien ouvert dans le Security Group
+\end{enumerate}
+\end{infobox}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-23-assets-addhost-lonix-zabbix.png}
-  \caption{Ajout d’un hôte dans Zabbix (exemple : client Linux).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-23-assets-addhost-lonix-zabbix.png}
+  \caption{Ajout d'un hôte dans Zabbix (exemple : client Linux)}
   \label{fig:add-host}
 \end{figure}
 
 \section{Validation : statut ZBX en vert}
-Lorsque les ports sont correctement ouverts et l’agent opérationnel, Zabbix indique la disponibilité en vert (ZBX).
+
+Lorsque les ports sont correctement ouverts et l'agent opérationnel, Zabbix indique la disponibilité en vert (ZBX).
+
+\begin{successbox}[title=Indicateurs de Succès]
+\begin{itemize}
+  \item Icône \success{ZBX verte} : l'agent répond correctement
+  \item Données récentes visibles dans \textit{Latest data}
+  \item Aucun message d'erreur dans les logs de l'agent
+\end{itemize}
+\end{successbox}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-12-assets-statut-zbx-vert-pour-linux-windows.png}
-  \caption{Validation de la connectivité : statut ZBX en vert pour Linux et Windows.}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-12-assets-statut-zbx-vert-pour-linux-windows.png}
+  \caption{Validation de la connectivité : statut ZBX en vert pour Linux et Windows}
   \label{fig:zbx-green}
 \end{figure}
 
 \section{Graphiques CPU/RAM et tableaux de bord}
-Les graphiques permettent de suivre l’évolution des ressources et d’illustrer la collecte effective des métriques.
+
+Les graphiques permettent de suivre l'évolution des ressources et d'illustrer la collecte effective des métriques.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-15-assets-monitoring.png}
-  \caption{Monitoring : consultation des dernières données (Latest data).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-15-assets-monitoring.png}
+  \caption{Monitoring : consultation des dernières données (Latest data)}
   \label{fig:latest-data}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/figure-27-assets-monitoring-graphe-client-linux.png}
-  \caption{Exemple de graphique CPU/RAM (preuve de collecte effective).}
+  \includegraphics[width=0.85\textwidth]{\imgpath/figure-27-assets-monitoring-graphe-client-linux.png}
+  \caption{Exemple de graphique CPU/RAM (preuve de collecte effective)}
   \label{fig:cpu-ram-graph}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/dashboard1.png}
-  \caption{Tableau de bord Zabbix : vue synthétique de supervision.}
+  \includegraphics[width=0.9\textwidth]{\imgpath/dashboard1.png}
+  \caption{Tableau de bord Zabbix : vue synthétique de supervision}
   \label{fig:dash1}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.95\textwidth]{\imgpath/dashboard2.png}
-  \caption{Dashboard final : état global et indicateurs principaux.}
+  \includegraphics[width=0.9\textwidth]{\imgpath/dashboard2.png}
+  \caption{Dashboard final : état global et indicateurs principaux}
   \label{fig:dash2}
 \end{figure}
 
 % =====================================================
-% 8. Difficultés rencontrées & solutions
+% CHAPTER 7: DIFFICULTÉS RENCONTRÉES & SOLUTIONS
 % =====================================================
 \chapter{Difficultés rencontrées \& solutions}
 
 \section{Ports bloqués / accès réseau}
-\textbf{Problème :} les hôtes apparaissent indisponibles (pas de données, ZBX rouge) si les ports 10050/10051 ne sont pas correctement autorisés.
 
-\textbf{Solution :} vérifier les règles des Security Groups, limiter les sources (My IP pour SSH/RDP/Web) et autoriser 10050 depuis le serveur Zabbix vers les clients.
+\begin{warningbox}[title=Problème Rencontré]
+\textbf{Symptôme :} Les hôtes apparaissent indisponibles (pas de données, ZBX rouge) si les ports 10050/10051 ne sont pas correctement autorisés.
+\end{warningbox}
+
+\begin{successbox}[title=Solution Appliquée]
+\textbf{Actions correctives :}
+\begin{itemize}
+  \item Vérifier les règles des Security Groups dans la console AWS
+  \item Limiter les sources (My IP pour SSH/RDP/Web)
+  \item Autoriser le port 10050 depuis l'IP privée du serveur Zabbix vers les clients
+  \item Tester la connectivité avec \code{telnet <IP\_CLIENT> 10050}
+\end{itemize}
+\end{successbox}
 
 \section{Docker indisponible après arrêt/redémarrage du lab}
-\textbf{Problème :} après un \textit{Stop} des instances ou un arrêt automatique, les conteneurs peuvent ne pas être actifs.
 
-\textbf{Solution :}
-\begin{lstlisting}[style=bash,caption={Relance des conteneurs après redémarrage}]
+\begin{warningbox}[title=Problème Rencontré]
+\textbf{Symptôme :} Après un \textit{Stop} des instances ou un arrêt automatique du Learner Lab, les conteneurs peuvent ne pas être actifs au redémarrage.
+\end{warningbox}
+
+\begin{successbox}[title=Solution Appliquée]
+\begin{lstlisting}[style=bash, caption={Relance des conteneurs après redémarrage}]
 cd /chemin/vers/le/projet
 docker compose up -d
 docker compose ps
 \end{lstlisting}
 
-\section{Limitations du Learner Lab}
+\textbf{Vérifications complémentaires :}
 \begin{itemize}
-  \item \textbf{Région :} privilégier \texttt{us-east-1 (N. Virginia)}.
-  \item \textbf{Types d’instances :} rester sur \texttt{t3.medium} et \texttt{t3.large}.
-  \item \textbf{Budget :} surveiller la consommation (environ 50\$) et arrêter les instances hors sessions.
-  \item \textbf{Arrêt automatique :} anticiper les redémarrages et relancer Docker Compose.
+  \item S'assurer que le service Docker est actif : \code{sudo systemctl status docker}
+  \item Vérifier les logs : \code{docker compose logs}
 \end{itemize}
+\end{successbox}
+
+\section{Limitations du Learner Lab}
+
+\begin{table}[H]
+\centering
+\caption{Contraintes et Bonnes Pratiques AWS Learner Lab}
+\label{tab:constraints}
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.5cm}
+                              >{\raggedright\arraybackslash}X
+                              >{\raggedright\arraybackslash}X}
+\toprule
+\rowcolor{tableheader}
+\prohead{Contrainte} & \prohead{Impact} & \prohead{Bonne Pratique} \\
+\midrule
+\rowcolor{tableodd}
+Région imposée & Certains services peuvent être indisponibles hors us-east-1 & Privilégier \code{us-east-1 (N. Virginia)} pour tous les déploiements \\
+\rowcolor{tableeven}
+Types d'instances & Limitation aux types t2/t3 & Rester sur \code{t3.medium} et \code{t3.large} selon les besoins \\
+\rowcolor{tableodd}
+Budget limité & Environ 50\$ de crédit disponible & Surveiller la consommation via Billing Dashboard et arrêter les instances hors sessions \\
+\rowcolor{tableeven}
+Arrêt automatique & Les instances s'arrêtent après 4h d'inactivité & Anticiper les redémarrages et relancer Docker Compose systématiquement \\
+\rowcolor{tableodd}
+Pas de VPC Peering & Impossibilité de connecter plusieurs VPC & Utiliser un VPC unique avec plusieurs subnets si nécessaire \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 % =====================================================
-% 9. Conclusion
+% CHAPTER 8: CONCLUSION
 % =====================================================
 \chapter{Conclusion}
 
-Le projet a abouti à la mise en place d’une infrastructure de supervision centralisée sur AWS, capable de monitorer un environnement hybride Linux et Windows via Zabbix.
+Le projet a abouti à la mise en place d'une infrastructure de supervision centralisée sur AWS, capable de monitorer un environnement hybride Linux et Windows via Zabbix.
 
 \section{Résumé des résultats}
+
+\begin{successbox}[title=Objectifs Atteints]
 \begin{itemize}
-  \item Architecture réseau opérationnelle (VPC + subnet public + IGW + routage).
-  \item Déploiement Zabbix conteneurisé reproductible via Docker Compose.
-  \item Agents Linux et Windows intégrés, supervision validée par les dashboards et métriques.
+  \item \textbf{Architecture réseau opérationnelle} : VPC + subnet public + IGW + routage configurés et validés
+  \item \textbf{Déploiement Zabbix conteneurisé} : Solution reproductible via Docker Compose avec PostgreSQL, Zabbix Server et interface Web
+  \item \textbf{Agents Linux et Windows intégrés} : Supervision validée par les dashboards et métriques temps réel
+  \item \textbf{Sécurisation appliquée} : Security Groups configurés selon le principe du moindre privilège
 \end{itemize}
+\end{successbox}
 
 \section{Bénéfices du monitoring hybride}
-Une supervision unique permet d’unifier les indicateurs, de réduire le temps de diagnostic et d’améliorer la disponibilité globale des services.
+
+Une supervision unique permet d'unifier les indicateurs, de réduire le temps de diagnostic et d'améliorer la disponibilité globale des services.
+
+\begin{infobox}[title=Avantages Opérationnels]
+\begin{itemize}
+  \item \textbf{Visibilité centralisée} : Un seul point d'accès pour superviser l'ensemble du parc
+  \item \textbf{Détection proactive} : Alertes en temps réel sur les anomalies système
+  \item \textbf{Analyse historique} : Graphiques et tendances pour anticiper les besoins
+  \item \textbf{Réduction du MTTR} : Diagnostic plus rapide grâce à la centralisation des métriques
+\end{itemize}
+\end{infobox}
 
 \section{Améliorations futures possibles}
-\begin{itemize}
-  \item Segmentation plus avancée : subnets privés, bastion, VPN.
-  \item Gestion sécurisée des secrets (SSM / Secrets Manager).
-  \item Haute disponibilité (base managée, sauvegardes, redondance).
-  \item Notifications (mail, Teams, Slack) et règles d’alerting plus fines.
-\end{itemize}
 
+\begin{table}[H]
+\centering
+\caption{Pistes d'Amélioration et Évolutions}
+\label{tab:improvements}
+\small
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}
+                              >{\raggedright\arraybackslash}X
+                              >{\centering\arraybackslash}p{2.5cm}}
+\toprule
+\rowcolor{tableheader}
+\prohead{Domaine} & \prohead{Amélioration} & \prohead{Priorité} \\
+\midrule
+\rowcolor{tableodd}
+Sécurité réseau & Segmentation avancée : subnets privés, bastion, VPN site-to-site & Haute \\
+\rowcolor{tableeven}
+Gestion des secrets & Utilisation d'AWS Secrets Manager ou Systems Manager Parameter Store & Haute \\
+\rowcolor{tableodd}
+Haute disponibilité & Base de données managée (RDS PostgreSQL), multi-AZ, Load Balancer & Moyenne \\
+\rowcolor{tableeven}
+Sauvegarde & Snapshots automatiques des volumes EBS, backup base de données & Haute \\
+\rowcolor{tableodd}
+Alerting & Notifications multi-canal (mail, Teams, Slack, SMS) & Moyenne \\
+\rowcolor{tableeven}
+Monitoring avancé & Intégration CloudWatch, métriques custom, dashboards consolidés & Basse \\
+\rowcolor{tableodd}
+Automatisation & Infrastructure as Code (Terraform/CloudFormation) & Moyenne \\
+\rowcolor{tableeven}
+Scalabilité & Auto Scaling Groups pour les agents, conteneurs orchestrés (ECS/EKS) & Basse \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
+\vspace{1cm}
+
+\begin{center}
+\begin{tcolorbox}[
+  colback=lightblue,
+  colframe=darkblue,
+  boxrule=2pt,
+  arc=5pt,
+  width=0.9\textwidth,
+  halign=center
+]
+{\large\bfseries\color{darkblue}
+Ce projet démontre la faisabilité et l'efficacité d'une solution\\[0.2cm]
+de monitoring cloud hybride sous AWS avec Zabbix.\\[0.2cm]
+Il constitue une base solide pour des déploiements en production.}
+\end{tcolorbox}
+\end{center}
+
+% =====================================================
+% END DOCUMENT
 % =====================================================
 \end{document}

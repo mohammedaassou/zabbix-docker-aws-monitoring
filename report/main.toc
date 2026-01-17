@@ -1,4 +1,7 @@
 \babel@toc {french}{}\relax 
+\contentsline {chapter}{Table des matières}{ii}{chapter*.1}%
+\contentsline {chapter}{Liste des figures}{iii}{chapter*.2}%
+\contentsline {chapter}{Liste des tableaux}{iv}{chapter*.3}%
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Contexte}{1}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Objectifs techniques}{1}{section.1.2}%
@@ -8,36 +11,36 @@
 \contentsline {subsection}{\numberline {2.1.1}Adressage IP}{3}{subsection.2.1.1}%
 \contentsline {subsection}{\numberline {2.1.2}Connectivité Internet}{3}{subsection.2.1.2}%
 \contentsline {subsection}{\numberline {2.1.3}Captures de configuration réseau}{4}{subsection.2.1.3}%
-\contentsline {section}{\numberline {2.2}Security Groups : tableau des ports}{6}{section.2.2}%
+\contentsline {section}{\numberline {2.2}Security Groups : tableau des ports}{5}{section.2.2}%
 \contentsline {subsection}{\numberline {2.2.1}Principe de filtrage}{6}{subsection.2.2.1}%
 \contentsline {subsection}{\numberline {2.2.2}Captures des Security Groups}{7}{subsection.2.2.2}%
 \contentsline {section}{\numberline {2.3}Schéma réseau}{8}{section.2.3}%
 \contentsline {chapter}{\numberline {3}Instances EC2}{9}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Tableau récapitulatif des instances}{9}{section.3.1}%
 \contentsline {section}{\numberline {3.2}Justification des choix t3.medium / t3.large}{9}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Captures d’écran (lancement et état Running)}{10}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Configuration réseau des instances (Edit network)}{12}{section.3.4}%
-\contentsline {chapter}{\numberline {4}Déploiement du serveur Zabbix (Docker)}{14}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Installation Docker}{14}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Installation Docker Compose}{15}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Fichier docker-compose.yml expliqué}{15}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Lancement des conteneurs}{17}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Vérification de l’interface Web}{17}{section.4.5}%
+\contentsline {section}{\numberline {3.3}Captures d'écran (lancement et état Running)}{10}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Configuration réseau des instances (Edit network)}{11}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Déploiement du serveur Zabbix (Docker)}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Installation Docker}{13}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Installation Docker Compose}{13}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Fichier docker-compose.yml expliqué}{14}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Lancement des conteneurs}{16}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Vérification de l'interface Web}{16}{section.4.5}%
 \contentsline {chapter}{\numberline {5}Configuration des agents}{18}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Agent Zabbix sur Linux (Ubuntu)}{18}{section.5.1}%
 \contentsline {subsection}{\numberline {5.1.1}Installation}{18}{subsection.5.1.1}%
 \contentsline {subsection}{\numberline {5.1.2}Configuration : zabbix\_agent2.conf (extrait)}{18}{subsection.5.1.2}%
-\contentsline {section}{\numberline {5.2}Agent Zabbix sur Windows Server}{19}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Installation MSI et paramètres}{19}{subsection.5.2.1}%
-\contentsline {chapter}{\numberline {6}Monitoring \& Dashboard}{21}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Ajout des hôtes}{21}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Validation : statut ZBX en vert}{21}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Graphiques CPU/RAM et tableaux de bord}{22}{section.6.3}%
-\contentsline {chapter}{\numberline {7}Difficultés rencontrées \& solutions}{25}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Ports bloqués / accès réseau}{25}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Docker indisponible après arrêt/redémarrage du lab}{25}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Limitations du Learner Lab}{25}{section.7.3}%
-\contentsline {chapter}{\numberline {8}Conclusion}{26}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Résumé des résultats}{26}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Bénéfices du monitoring hybride}{26}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Améliorations futures possibles}{26}{section.8.3}%
+\contentsline {section}{\numberline {5.2}Agent Zabbix sur Windows Server}{20}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Installation MSI et paramètres}{20}{subsection.5.2.1}%
+\contentsline {chapter}{\numberline {6}Monitoring \& Dashboard}{22}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Ajout des hôtes}{22}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Validation : statut ZBX en vert}{23}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Graphiques CPU/RAM et tableaux de bord}{23}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Difficultés rencontrées \& solutions}{26}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Ports bloqués / accès réseau}{26}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Docker indisponible après arrêt/redémarrage du lab}{26}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Limitations du Learner Lab}{27}{section.7.3}%
+\contentsline {chapter}{\numberline {8}Conclusion}{28}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Résumé des résultats}{28}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Bénéfices du monitoring hybride}{28}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Améliorations futures possibles}{29}{section.8.3}%

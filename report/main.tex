@@ -73,7 +73,7 @@
 
 % Better table spacing
 \renewcommand{\arraystretch}{1.3}
-\setlength{\tabcolsep}{10pt}
+\setlength{\tabcolsep}{8pt}
 
 % =====================================================
 % BOXES AND FRAMES
@@ -222,8 +222,7 @@
   {\thesection}
   {1em}
   {}
-  [\vspace{-8pt}{\color{primary}\titlerule[1pt]}]
-\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\section}{0pt}{18pt}{12pt}
 
 \titleformat{\subsection}
   {\normalfont\large\bfseries\sffamily\color{primary}}
@@ -373,6 +372,7 @@
 % CHAPTER 1: INTRODUCTION
 % =====================================================
 \chapter{Introduction}
+\thispagestyle{empty}
 
 \section{Contexte}
 
@@ -403,10 +403,13 @@ Les objectifs du projet sont les suivants :
 \end{itemize}
 \end{infobox}
 
+\clearpage
+
 % =====================================================
 % CHAPTER 2: ARCHITECTURE RÉSEAU
 % =====================================================
 \chapter{Architecture réseau}
+\thispagestyle{empty}
 
 \section{Description du VPC, subnet, IGW et route table}
 
@@ -485,8 +488,8 @@ Les règles sont définies selon le principe du moindre privilège :
 \label{tab:ports}
 \small
 \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.8cm}
-                              >{\centering\arraybackslash}p{2cm}
-                              >{\raggedright\arraybackslash}p{3.5cm}
+                              >{\centering\arraybackslash}p{1.8cm}
+                              >{\raggedright\arraybackslash}p{3.2cm}
                               >{\raggedright\arraybackslash}X}
 \toprule
 \rowcolor{tableheader}
@@ -538,10 +541,13 @@ Administration RDP & 3389 & Instance Windows & Administration distante (My IP) \
   \label{fig:vpc}
 \end{figure}
 
+\clearpage
+
 % =====================================================
 % CHAPTER 3: INSTANCES EC2
 % =====================================================
 \chapter{Instances EC2}
+\thispagestyle{empty}
 
 \section{Tableau récapitulatif des instances}
 
@@ -551,12 +557,12 @@ Les instances EC2 déployées sont conformes aux types autorisés et recommandé
 \centering
 \caption{Récapitulatif des instances EC2 du projet}
 \label{tab:ec2}
-\small
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.2cm}
-                              >{\centering\arraybackslash}p{2cm}
-                              >{\raggedright\arraybackslash}p{2.5cm}
-                              >{\centering\arraybackslash}p{1.8cm}
-                              >{\centering\arraybackslash}p{2cm}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.5cm}
+                              >{\centering\arraybackslash}p{1.6cm}
+                              >{\raggedright\arraybackslash}p{2cm}
+                              >{\centering\arraybackslash}p{1.3cm}
+                              >{\centering\arraybackslash}p{1.5cm}
                               >{\raggedright\arraybackslash}X}
 \toprule
 \rowcolor{tableheader}
@@ -565,9 +571,9 @@ Les instances EC2 déployées sont conformes aux types autorisés et recommandé
 \rowcolor{tableodd}
 Serveur Zabbix & t3.large & Ubuntu 22.04 & 2 & 8 & Héberge Docker : Zabbix Server + Web + DB \\
 \rowcolor{tableeven}
-Client Linux & t3.medium & Ubuntu 22.04 & 2 & 4 & Agent Zabbix : métriques système Linux \\
+Client Linux & t3.medium & Ubuntu 22.04 & 2 & 4 & Agent Zabbix pour métriques système Linux \\
 \rowcolor{tableodd}
-Client Windows & t3.large & Windows Server & 2 & 8 & Agent Zabbix : métriques Windows (plus gourmand) \\
+Client Windows & t3.large & Windows Server & 2 & 8 & Agent Zabbix pour métriques Windows \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -641,16 +647,30 @@ Après le lancement, il peut être nécessaire de vérifier (ou ajuster) la conf
   \label{fig:vpc-linux-placement}
 \end{figure}
 
+\clearpage
+
 % =====================================================
 % CHAPTER 4: DÉPLOIEMENT DU SERVEUR ZABBIX (DOCKER)
 % =====================================================
 \chapter{Déploiement du serveur Zabbix (Docker)}
+\thispagestyle{empty}
 
 \section{Installation Docker}
 
 Sur Ubuntu 22.04, Docker est installé via le dépôt officiel. Les commandes suivantes illustrent une procédure type.
 
 \begin{lstlisting}[style=bash, caption={Installation de Docker sur Ubuntu (serveur Zabbix)}]
+sudo apt update
+sudo apt install -y ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo systemctl enable --now docker
@@ -772,10 +792,13 @@ Le point de contrôle attendu ici est simple :
   \label{fig:zabbix-login}
 \end{figure}
 
+\clearpage
+
 % =====================================================
 % CHAPTER 5: CONFIGURATION DES AGENTS
 % =====================================================
 \chapter{Configuration des agents}
+\thispagestyle{empty}
 
 \section{Agent Zabbix sur Linux (Ubuntu)}
 
@@ -853,10 +876,13 @@ L'agent Zabbix peut être installé via un exécutable MSI. Lors de l'installati
   \label{fig:agent-win}
 \end{figure}
 
+\clearpage
+
 % =====================================================
 % CHAPTER 6: MONITORING & DASHBOARD
 % =====================================================
 \chapter{Monitoring \& Dashboard}
+\thispagestyle{empty}
 
 \section{Ajout des hôtes}
 
@@ -935,10 +961,13 @@ Les graphiques permettent de suivre l'évolution des ressources et d'illustrer l
   \label{fig:dash2}
 \end{figure}
 
+\clearpage
+
 % =====================================================
 % CHAPTER 7: DIFFICULTÉS RENCONTRÉES & SOLUTIONS
 % =====================================================
 \chapter{Difficultés rencontrées \& solutions}
+\thispagestyle{empty}
 
 \section{Ports bloqués / accès réseau}
 
@@ -982,8 +1011,8 @@ docker compose ps
 \centering
 \caption{Contraintes et Bonnes Pratiques AWS Learner Lab}
 \label{tab:constraints}
-\small
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.5cm}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3cm}
                               >{\raggedright\arraybackslash}X
                               >{\raggedright\arraybackslash}X}
 \toprule
@@ -991,23 +1020,26 @@ docker compose ps
 \prohead{Contrainte} & \prohead{Impact} & \prohead{Bonne Pratique} \\
 \midrule
 \rowcolor{tableodd}
-Région imposée & Certains services peuvent être indisponibles hors us-east-1 & Privilégier \code{us-east-1 (N. Virginia)} pour tous les déploiements \\
+Région imposée & Certains services peuvent être indisponibles hors us-east-1 & Privilégier \code{us-east-1} pour tous les déploiements \\
 \rowcolor{tableeven}
-Types d'instances & Limitation aux types t2/t3 & Rester sur \code{t3.medium} et \code{t3.large} selon les besoins \\
+Types d'instances & Limitation aux types t2/t3 & Rester sur \code{t3.medium} et \code{t3.large} \\
 \rowcolor{tableodd}
-Budget limité & Environ 50\$ de crédit disponible & Surveiller la consommation via Billing Dashboard et arrêter les instances hors sessions \\
+Budget limité & Environ 50\$ de crédit disponible & Surveiller la consommation et arrêter les instances hors sessions \\
 \rowcolor{tableeven}
-Arrêt automatique & Les instances s'arrêtent après 4h d'inactivité & Anticiper les redémarrages et relancer Docker Compose systématiquement \\
+Arrêt automatique & Les instances s'arrêtent après 4h d'inactivité & Anticiper les redémarrages et relancer Docker Compose \\
 \rowcolor{tableodd}
-Pas de VPC Peering & Impossibilité de connecter plusieurs VPC & Utiliser un VPC unique avec plusieurs subnets si nécessaire \\
+Pas de VPC Peering & Impossibilité de connecter plusieurs VPC & Utiliser un VPC unique avec plusieurs subnets \\
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\clearpage
 
 % =====================================================
 % CHAPTER 8: CONCLUSION
 % =====================================================
 \chapter{Conclusion}
+\thispagestyle{empty}
 
 Le projet a abouti à la mise en place d'une infrastructure de supervision centralisée sur AWS, capable de monitorer un environnement hybride Linux et Windows via Zabbix.
 
@@ -1041,10 +1073,10 @@ Une supervision unique permet d'unifier les indicateurs, de réduire le temps de
 \centering
 \caption{Pistes d'Amélioration et Évolutions}
 \label{tab:improvements}
-\small
-\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm}
+\footnotesize
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.5cm}
                               >{\raggedright\arraybackslash}X
-                              >{\centering\arraybackslash}p{2.5cm}}
+                              >{\centering\arraybackslash}p{2.2cm}}
 \toprule
 \rowcolor{tableheader}
 \prohead{Domaine} & \prohead{Amélioration} & \prohead{Priorité} \\
